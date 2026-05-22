@@ -1,4 +1,4 @@
-/*	1.- BASE DE DATOS Y CARACTERISTICAS (DISE—O Y MODELADO)	
+/*	1.- BASE DE DATOS Y CARACTERISTICAS (DISE√ëO Y MODELADO)	
 CREATE DATABASE BIBLIOTECA_U*/
 --GO
 --USE BIBLIOTECA_U
@@ -41,8 +41,37 @@ CREATE DATABASE BIBLIOTECA_U*/
 --	MATRICULA_U NVARCHAR(20),
 --	USUARIO_AUTORIZO NVARCHAR(100))
 
-/*	2.- Usuarios y Permisos	*/
---CREATE USER 
+/*	2.- Usuarios y Permisos	*/ --Parte de Abril
+CREATE LOGIN USUARIOA1 WITH PASSWORD = '1234',
+DEFAULT DATABASE =  [master], CHECK_EXPIRATION = OFF, CHECK_POLICY = OFF
+
+--CREAR USUARIO
+	
+CREATE USER USUARIO01 FOR LOGIN USUARIOA1
+WITH DEFAULT_SCHEMA DBO
+
+	
+--ENCARGADO
+CREATE LOGIN ENCARGADO WITH PASSWORD = 'ABCD',
+DEFAULT_DATABASE = [master], CHECK_EXPIRATION = OFF, CHECK_POLICY = OFF
+	--CREAR USUARIO
+	CREATE USER ENC_INV FOR LOGIN ENCARGADO
+	WITH DEFAULT_SCHEMA DBO
+
+--BIBLIOTECARIO
+CREATE LOGIN BIBLIOTECARIO WITH PASSWORD = 'BUAP1234'
+DEFAULT_DATABASE =[master], CHECK_EXPIRATION = OFF, CHECK_POLICY = OFF
+	--CREAR USUARIO
+	CREATE USER LIBRERO FOR LOGIN BIBLIOTECARIO
+	WITH DEFAULT_SCHEMA DBO
+
+--DIRECTOR
+CREATE LOGIN DIRECTOR WITH PASSWORD = 'LA_LEY',
+DEFAULT_DATABASE = [master], CHECK_EXPIRATION = OFF, CHECK_POLICY = OFF
+	--CREAR USUARIO
+	CREATE USER ADM1N FOR LOGIN DIRECTOR
+	WITH DEFAULT_SCHEMA DBO
+	
 
 /*	3.- Contruccion de Dispensadores (Triggers)	*/
 --TABLA PRESTAMOS
@@ -316,10 +345,10 @@ CREATE DATABASE BIBLIOTECA_U*/
 
 --CREATE TRIGGER DBO.BORRAR_INVENTARIO
 
-/*	4.- ConstrucciÛn de Notificaciones	*/
--- Formato exacto de sp_send_dbmail visto en tu diapositiva (MÌnimo 3 objetos)
+/*	4.- Construcci√≥n de Notificaciones	*/
+-- Formato exacto de sp_send_dbmail visto en tu diapositiva (M√≠nimo 3 objetos)
 
--- Objeto 1: Correo para reportar un nuevo prÈstamo
+-- Objeto 1: Correo para reportar un nuevo pr√©stamo
 CREATE PROCEDURE DBO.NOTIFICAR_NUEVO_PRESTAMO
     @MATRICULA NVARCHAR(20),
     @ID_LIBRO INT
@@ -353,7 +382,7 @@ BEGIN
 END
 GO
 
--- Objeto 3: Correo para confirmar una devoluciÛn de libro
+-- Objeto 3: Correo para confirmar una devoluci√≥n de libro
 CREATE PROCEDURE DBO.NOTIFICAR_DEVOLUCION
     @MATRICULA NVARCHAR(20),
     @ID_LIBRO INT
@@ -372,12 +401,12 @@ GO
 
 
 /*	5.- Contruccion de Jobs	*/
--- Formato exacto de sp_add_job y sp_add_jobstep visto en tu diapositiva (MÌnimo 3 objetos)
+-- Formato exacto de sp_add_job y sp_add_jobstep visto en tu diapositiva (M√≠nimo 3 objetos)
 
 USE msdb
 GO
 
--- Objeto 1: Job para actualizar estados vencidos autom·ticamente
+-- Objeto 1: Job para actualizar estados vencidos autom√°ticamente
 EXEC sp_add_job
     @job_name = 'Job_Vencer_Prestamos'
 
@@ -409,3 +438,8 @@ EXEC sp_add_jobstep
     @subsystem = 'TSQL',
     @command = 'SELECT ID_LIBRO, CANTIDAD FROM BIBLIOTECA_U.dbo.INVENTARIO WHERE CANTIDAD = 0'
 GO
+/*	5.- Construcci√≥n de Jobs	*/
+
+/*	6.- Tablas Temporales, Variables y Queries Avanzadoss	*/
+
+
